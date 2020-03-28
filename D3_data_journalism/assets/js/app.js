@@ -1,50 +1,50 @@
 // @TODO: YOUR CODE HERE!
+
+
 d3.csv('data.csv', function (data) {
-    // Variables
-    var body = d3.select('body')
-      var margin = { top: 50, right: 50, bottom: 50, left: 50 }
-      var h = 500 - margin.top - margin.bottom
-      var w = 500 - margin.left - margin.right
-      var formatPercent = d3.format('.2%')
+
+    let body = d3.select('body');
+    let margin = { top: 50, right: 50, bottom: 50, left: 50 };
+    let h = 500 - margin.top - margin.bottom;
+    let w = 500 - margin.left - margin.right;
+    
       // Scales
-    var colorScale = d3.scale.category20()
-    var xScale = d3.scale.linear()
-      .domain([
-          d3.min([0,d3.min(data,function (d) { return d.asd })]),
-          d3.max([0,d3.max(data,function (d) { return d.asd })])
+    let colorScale = d3.scale.category20();
+    let xScale = d3.scale.linear()
+        .domain([
+          d3.min([0,d3.min(data,d => d.obesity)]),
+          d3.max([0,d3.max(data,d => d.obesity )])
           ])
-      .range([0,w])
-    var yScale = d3.scale.linear()
-      .domain([
-          d3.min([0,d3.min(data,function (d) { return d.aror })]),
-          d3.max([0,d3.max(data,function (d) { return d.aror })])
+      .range([0,w]);
+    let yScale = d3.scale.linear()
+        .domain([
+          d3.min([0,d3.min(data, d => d.income )]),
+          d3.max([0,d3.max(data, d => d.income )])
           ])
-      .range([h,0])
+      .range([h,0]);
       // SVG
-      var svg = body.append('svg')
+      let svg = body.append('svg')
           .attr('height',h + margin.top + margin.bottom)
           .attr('width',w + margin.left + margin.right)
         .append('g')
-          .attr('transform','translate(' + margin.left + ',' + margin.top + ')')
+          .attr('transform','translate(' + margin.left + ',' + margin.top + ')');
       // X-axis
-      var xAxis = d3.svg.axis()
+      let xAxis = d3.svg.axis()
         .scale(xScale)
-        .tickFormat(formatPercent)
         .ticks(5)
-        .orient('bottom')
+        .orient('bottom');
     // Y-axis
-      var yAxis = d3.svg.axis()
+      let yAxis = d3.svg.axis()
         .scale(yScale)
-        .tickFormat(formatPercent)
         .ticks(5)
-        .orient('left')
+        .orient('left');
     // Circles
-    var circles = svg.selectAll('circle')
+    let circles = svg.selectAll('circle')
         .data(data)
         .enter()
-      .append('circle')
-        .attr('cx',function (d) { return xScale(d.asd) })
-        .attr('cy',function (d) { return yScale(d.aror) })
+        .append('circle')
+        .attr('cx',function (d) { return xScale(d.obesity) })
+        .attr('cy',function (d) { return yScale(d.income) })
         .attr('r','10')
         .attr('stroke','black')
         .attr('stroke-width',1)
@@ -63,10 +63,10 @@ d3.csv('data.csv', function (data) {
             .attr('r',10)
             .attr('stroke-width',1)
         })
-      .append('title') // Tooltip
-        .text(function (d) { return d.variable +
-                             '\nReturn: ' + formatPercent(d.aror) +
-                             '\nStd. Dev.: ' + formatPercent(d.asd) })
+      .append('Income vs Obesity') // Tooltip
+        .text(function (d) { return d.abbr +
+                             '\nReturn: ' + formatPercent(d.income) +
+                             '\nStd. Dev.: ' + formatPercent(d.obesity) });
     // X-axis
     svg.append('g')
         .attr('class','axis')
@@ -78,7 +78,7 @@ d3.csv('data.csv', function (data) {
         .attr('x',w)
         .attr('dy','.71em')
         .style('text-anchor','end')
-        .text('Annualized Standard Deviation')
+        .text('Obesity');
     // Y-axis
     svg.append('g')
         .attr('class', 'axis')
@@ -90,6 +90,6 @@ d3.csv('data.csv', function (data) {
         .attr('y',5)
         .attr('dy','.71em')
         .style('text-anchor','end')
-        .text('Annualized Return')
-  })
+        .text('Median Income');
+});
   
